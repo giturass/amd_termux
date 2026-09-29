@@ -207,8 +207,11 @@ class LiteTests(unittest.TestCase):
         (prefix / "bin/python").symlink_to(sys.executable)
         env = dict(os.environ, PREFIX=str(prefix), AMD_LITE_DIR=str(self.directory),
                    AMD_TEST_ARCHIVE=str(self.archive))
+        # Emulate Termux's architecture name even on an Ubuntu CI host (amd64).
         result = subprocess.run(
-            ["bash", "-c", 'source "$1"\nensure_pkg() { :; }\ninstall_lite --archive "$AMD_TEST_ARCHIVE"',
+            ["bash", "-c", 'source "$1"\n'
+             'dpkg() { [ "$*" = --print-architecture ] || return 99; echo x86_64; }\n'
+             'ensure_pkg() { :; }\ninstall_lite --archive "$AMD_TEST_ARCHIVE"',
              "amd-test", str(PROJECT / "amd.sh")],
             env=env, text=True, capture_output=True,
         )
