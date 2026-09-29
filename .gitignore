@@ -1,0 +1,23 @@
+__pycache__/
+*.py[cod]
+
+# Local Python environments
+.venv/
+.venv.bak-*/
+
+# Local configuration and credentials
+/config.toml
+.env
+.env.*
+!.env.example
+
+# Installed sources, guest images, account storage, and runtime files
+/AppleMusicDecrypt/
+/wrapper-lite/
+/qemu/
+/data.img
+/qemu-assets.zip
+/tmp/
+*.log
+
+.DS_Store
