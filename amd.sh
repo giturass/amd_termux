@@ -235,10 +235,10 @@ install_manager() (
 )
 
 start_amd() (
-    [ -f "$AMD_DIR/main.py" ] && [ -x "$AMD_DIR/.venv/bin/python" ] || {
+    if [ ! -f "$AMD_DIR/main.py" ] || [ ! -x "$AMD_DIR/.venv/bin/python" ]; then
         echo "尚未完成 AMD 安装，请先选择菜单 1 安装或菜单 2 更新" >&2
         return 1
-    }
+    fi
     command -v grun >/dev/null 2>&1 || { echo "缺少 grun，请先安装或更新 AMD" >&2; return 1; }
     mkdir -p "$AMD_TMP_DIR"
     amd_run_tmp=$(mktemp "$AMD_TMP_DIR/amd-run.XXXXXX.sh")
@@ -271,7 +271,10 @@ deploy_amd() {
 }
 
 install_amd() {
-    [ -r /sdcard ] && [ -w /sdcard ] || { echo "请先执行: termux-setup-storage" >&2; return 1; }
+    if [ ! -r /sdcard ] || [ ! -w /sdcard ]; then
+        echo "请先执行: termux-setup-storage" >&2
+        return 1
+    fi
     deploy_amd
 }
 
